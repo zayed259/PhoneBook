@@ -41,4 +41,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the contacts for the user.
+     */
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class);
+    }
+    
 }

@@ -15,10 +15,13 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
             $table->string('phone');
             $table->string('email');
             $table->string('photo');
+            $table->set('favourite',['1','0'])->default('0');
             $table->softDeletes();
             $table->timestamps();
         });

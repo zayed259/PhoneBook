@@ -11,8 +11,20 @@ class Contact extends Model
     use HasFactory, SoftDeletes;
     protected $fillable = [
         'name',
+        'user_id',
         'phone',
         'email',
         'photo'
     ];
+
+    /**
+     * Get the user that owns the Contact
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

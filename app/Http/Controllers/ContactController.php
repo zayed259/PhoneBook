@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
@@ -19,8 +21,10 @@ class ContactController extends Controller
      */
     public function index()
     {
-        $contacts = Contact::all();
-        return view('contact.index', compact('contacts'))->with('user',Auth::user());
+        // dd(Auth::id());
+        $contacts = Contact::where('user_id', Auth::id())->orderBy('name', 'asc')->get();
+        $favouritecontacts = Contact::where('user_id', Auth::id())->where('favourite', 1)->orderBy('name', 'asc')->get();
+        return view('contact.index', compact('contacts'))->with(compact('favouritecontacts'))->with('user', Auth::user());
     }
 
     /**
@@ -30,7 +34,7 @@ class ContactController extends Controller
      */
     public function create()
     {
-        return view('contact.create')->with('user',Auth::user());
+        return view('contact.create')->with('user', Auth::user());
     }
 
     /**
@@ -54,9 +58,11 @@ class ContactController extends Controller
 
         // save image in desired format
         $img->save($storagepath);
-
+        $u = User::find(Auth::id());
+        // dd($u->id);
         $data = [
             'name' => $request->name,
+            'user_id' => $u->id,
             'phone' => $request->phone,
             'email' => $request->email,
             'photo' => $path
@@ -77,7 +83,7 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
-        return view('contact.show', compact('contact'))->with('user',Auth::user());
+        return view('contact.show', compact('contact'))->with('user', Auth::user());
     }
 
     /**
@@ -88,7 +94,7 @@ class ContactController extends Controller
      */
     public function edit(Contact $contact)
     {
-        return view('contact.edit', compact('contact'))->with('user',Auth::user());
+        return view('contact.edit', compact('contact'))->with('user', Auth::user());
     }
 
     /**
@@ -114,7 +120,7 @@ class ContactController extends Controller
         // save image in desired format
         $img->save($storagepath);
 
-        if($contact->photo){
+        if ($contact->photo) {
             Storage::delete($contact->photo);
         }
 
@@ -125,7 +131,6 @@ class ContactController extends Controller
         $contact->save();
 
         return redirect()->route('contact.index')->with('success', 'Contact updated successfully.');
-
     }
 
     /**
@@ -143,28 +148,55 @@ class ContactController extends Controller
     public function trashed()
     {
         $contacts = Contact::onlyTrashed()->get();
-        return view('contact.trashed', compact('contacts'))->with('user',Auth::user());
+        return view('contact.trashed', compact('contacts'))->with('user', Auth::user());
     }
 
-    public function trashedRestore($id){
+    public function trashedRestore($id)
+    {
         $contact = Contact::onlyTrashed()->findOrFail($id);
         $contact->restore();
         return redirect()->route('contact.index')->with('success', 'Contact restored successfully.');
     }
 
-    public function trashedDelete($id){
+    public function trashedDelete($id)
+    {
         $contact = Contact::onlyTrashed()->findOrFail($id);
         $contact->forceDelete();
-        if($contact->photo){
+        if ($contact->photo) {
             Storage::delete($contact->photo);
         }
         return redirect()->route('contact.index')->with('success', 'Contact deleted permanently.');
-
     }
     public function export_contact_pdf()
     {
         $contacts = Contact::all();
         $pdf = PDF::loadView('contact.pdf', compact('contacts'));
         return $pdf->download('Contactlist.pdf');
+    }
+
+    public function favorite(Request $request){
+        $contact = Contact::find($request->id);
+        $contact->favourite = $request->favourite;
+        if($contact->save()){
+            return response()->json(['done'=> 1,'message'=>'Favorite updated successfully']);
+        }else{
+            return response()->json(['done'=> 0,'message'=>'Favorite not updated']);
+        }
+    }
+    // search
+    public function search(Request $request)
+    {
+        $searchdata = $request->term;
+        $con = Contact::select('id','name')->where('name','LIKE',"%{$searchdata}%")->get();
+        $items = [];
+        foreach ($con as $c) {
+            $items[] = [
+                'label' => $c->name,
+                'value' => $c->name,
+                'id' => $c->id
+            ];
+        }
+        return response()->json($items);
+
     }
 }

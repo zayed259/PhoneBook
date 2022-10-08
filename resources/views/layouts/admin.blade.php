@@ -8,6 +8,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="AdminKit">
 	<meta name="keywords" content="">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link rel="shortcut icon" href="{{url('assets/img/icons/icon-48x48.png')}}" />
@@ -48,7 +49,7 @@
 							<i class="align-middle" data-feather="settings"></i>
 							</a>
 
-							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+							<a class="nav-link d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
 								<span class="text-dark">{{Auth::user()->name}}</span>
 								@if ($user->profile)
                                 <img src="{{url(Storage::url($user->profile->image))}}" class="img-profile rounded-circle" alt="Profile Image" width="40px">
@@ -95,6 +96,12 @@
 		$(document).ready( function () {
 			$('#dataTable').DataTable();
 		});
+
+		$.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 	</script>
 
     @yield('script')

@@ -32,6 +32,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('contact/trashed/{id}/force_delete', [ContactController::class, 'trashedDelete'])->name('contact.trashed.destroy');
     Route::resource("/contact", ContactController::class);
     Route::get('export_contact_pdf', [ContactController::class, 'export_contact_pdf']);
+    Route::post('favorite', [ContactController::class, 'favorite']);
+    Route::get('search', [ContactController::class, 'search']);
+    
 
 
 });
