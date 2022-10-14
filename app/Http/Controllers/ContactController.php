@@ -19,12 +19,27 @@ class ContactController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    public function index(Request $request)
     {
-        // dd(Auth::id());
-        $contacts = Contact::where('user_id', Auth::id())->orderBy('name', 'asc')->get();
-        $favouritecontacts = Contact::where('user_id', Auth::id())->where('favourite', 1)->orderBy('name', 'asc')->get();
-        return view('contact.index', compact('contacts'))->with(compact('favouritecontacts'))->with('user', Auth::user());
+        $contacts_query = Contact::where('user_id', Auth::user()->id)->orderBy('name', 'asc');
+        if ($request->has('filter') && $request->get('filter') != '') {
+            $contacts_query->where("name", "like", $request->get("filter") . "%");
+        }
+        if ($request->has('search') && $request->get('search') != '') {
+            $contacts_query->where("name", "like", "%" . $request->get("search") . "%")
+                ->orWhere("email", "like", "%" . $request->get("search") . "%")
+                ->orWhere("phone", "like", "%" . $request->get("search") . "%");
+        }
+        $contacts = $contacts_query->latest()->get();
+
+        if ($request->ajax()) {
+            $view = view('contact.list', ['contacts' => $contacts]);
+            $html = $view->render();
+            return response()->json(array('error' => false, 'message' => 'success', 'data' => $html));
+        }
+        $favouritecontacts = Contact::where('user_id', Auth::id())->where('isfavourite', '1')->orderBy('name', 'asc')->get();
+        return view('contact.index', ['title' => 'Contact List', 'contacts' => $contacts])->with(compact('favouritecontacts'))->with('user', Auth::user());
     }
 
     /**
@@ -59,7 +74,6 @@ class ContactController extends Controller
         // save image in desired format
         $img->save($storagepath);
         $u = User::find(Auth::id());
-        // dd($u->id);
         $data = [
             'name' => $request->name,
             'user_id' => $u->id,
@@ -67,12 +81,8 @@ class ContactController extends Controller
             'email' => $request->email,
             'photo' => $path
         ];
-        // dd($data);
         Contact::create($data);
-        // return redirect()->route('contact.index');
-
-        // $contact = Contact::create($request->validated());
-        return redirect()->route('contact.index')->with('success', 'Contact created successfully.');
+        return redirect()->route('contact.index')->with('message', 'Contact created successfully.');
     }
 
     /**
@@ -130,7 +140,7 @@ class ContactController extends Controller
         $contact->photo = $path;
         $contact->save();
 
-        return redirect()->route('contact.index')->with('success', 'Contact updated successfully.');
+        return redirect()->route('contact.index')->with('message', 'Contact updated successfully.');
     }
 
     /**
@@ -142,7 +152,7 @@ class ContactController extends Controller
     public function destroy(Contact $contact)
     {
         $contact->delete();
-        return redirect()->route('contact.index')->with('success', 'Contact deleted successfully.');
+        return redirect()->route('contact.index')->with('message', 'Contact deleted successfully.');
     }
 
     public function trashed()
@@ -155,7 +165,7 @@ class ContactController extends Controller
     {
         $contact = Contact::onlyTrashed()->findOrFail($id);
         $contact->restore();
-        return redirect()->route('contact.index')->with('success', 'Contact restored successfully.');
+        return redirect()->route('contact.index')->with('message', 'Contact restored successfully.');
     }
 
     public function trashedDelete($id)
@@ -165,38 +175,31 @@ class ContactController extends Controller
         if ($contact->photo) {
             Storage::delete($contact->photo);
         }
-        return redirect()->route('contact.index')->with('success', 'Contact deleted permanently.');
+        return redirect()->route('contact.index')->with('message', 'Contact deleted permanently.');
     }
     public function export_contact_pdf()
     {
-        $contacts = Contact::all();
+        $contacts = Contact::orderBy('name', 'asc')->get();
         $pdf = PDF::loadView('contact.pdf', compact('contacts'));
         return $pdf->download('Contactlist.pdf');
     }
 
-    public function favorite(Request $request){
-        $contact = Contact::find($request->id);
-        $contact->favourite = $request->favourite;
-        if($contact->save()){
-            return response()->json(['done'=> 1,'message'=>'Favorite updated successfully']);
-        }else{
-            return response()->json(['done'=> 0,'message'=>'Favorite not updated']);
-        }
-    }
-    // search
-    public function search(Request $request)
+    public function favorite($id)
     {
-        $searchdata = $request->term;
-        $con = Contact::select('id','name')->where('name','LIKE',"%{$searchdata}%")->get();
-        $items = [];
-        foreach ($con as $c) {
-            $items[] = [
-                'label' => $c->name,
-                'value' => $c->name,
-                'id' => $c->id
-            ];
+        $contact = Contact::find($id);
+        if (Auth::user()->id == $contact->user_id) {
+            if ($contact->isfavourite == 1) {
+                $contact->isfavourite = '0';
+                $contact->save();
+                return back()->with('message', 'Contact removed from favourite list');
+            }
+            if ($contact->isfavourite == 0) {
+                $contact->isfavourite = '1';
+                $contact->save();
+                return back()->with('message', 'Contact added to favourite list');
+            }
+        } else {
+            return back()->with('warning', 'You are not authorized to hide/show this blog!!!');
         }
-        return response()->json($items);
-
     }
 }

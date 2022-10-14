@@ -13,9 +13,6 @@
             <a href="{{url('contact')}}" class="btn btn-primary btn-circle btn-sm" title="Back to Contact List">
                 <i class="fas fa-arrow-left"></i>
             </a>
-            <a href="{{url('export_contact_trash_pdf')}}" class="btn btn-primary btn-circle btn-sm" title="Back to Contact List">
-                <i class="fas fa-file-pdf"></i>
-            </a>
         </div>
     </div>
     <!-- Card Body -->
@@ -33,9 +30,9 @@
                     <tr>
                         <td>
                             @if ($contact->photo)
-                                <img src="{{url(Storage::url($contact->photo))}}" class="image" alt="image" class="image-fluid rounded-circle" height="50px">
+                                <img src="{{url(Storage::url($contact->photo))}}" class="img-profile rounded-circle" alt="image" class="image-fluid rounded-circle" height="50px">
                             @else
-                                <img src="{{url('assets/img/avatars/avatar.jpg')}}" class="image" alt="image">
+                                <img src="{{url('assets/img/avatars/avatar.jpg')}}" class="img-profile rounded-circle" alt="image">
                             @endif
                         </td>
                         <td>{{ $contact->name }}</td>

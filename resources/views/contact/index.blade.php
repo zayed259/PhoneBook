@@ -24,185 +24,62 @@
             </a>
         </div>
     </div>
-    
-    @include('partial.flash')
-    @include('partial.error')
-    {{-- search contact --}}
-    <div class="card-body">
-        <div class="form-group">
-            {!! Form::text('search', null, ['class'=>'form-control', 'id'=>'search', 'placeholder'=>'Search']) !!}
-        </div>
-    </div>
-    {{-- favourite contact --}}
-    <table class="table table-hover my-0">
-        <thead>
-            {{-- sum Contact --}}
-            <tr>
-                <th colspan="5">
-                    <h5 class="font-weight-bold text-uppercase">Favourites: ({{ $favouritecontacts->count() }})</h5>
-                </th>
-        </thead>
-        <tbody>
-            @foreach ($favouritecontacts as $contact)
-            <tr>
-                <td>
-                    @if ($contact->photo)
-                        <img src="{{url(Storage::url($contact->photo))}}" alt="image" class="img-profile rounded-circle" height="50px">
-                        
-                    @else
-                        <img src="{{url('assets/img/avatars/avatar.jpg')}}" class="img-profile rounded-circle" alt="image">
-                    @endif
-                </td>
-                <td>{{ $contact->name }}</td>
-                <td class="d-none d-xl-table-cell">{{ $contact->phone }}</td>
-                <td class="d-none d-xl-table-cell">{{ $contact->email }}</td>
-                <td class="d-flex justify-content-between" width="120px">
-                    {{-- favourite --}}
-                    @if ($contact->favourite)
-                        <a href="{{url('contact/'.$contact->id.'/favourite')}}" class="btn btn-primary btn-circle btn-sm fav" title="Favourite">
-                            <i class="fas fa-star"></i>
-                        </a>
-                    @else
-                        <a href="{{url('contact/'.$contact->id.'/favourite')}}" class="btn btn-primary btn-circle btn-sm fav" title="Favourite">
-                            <i class="far fa-star"></i>
-                        </a>
-                    @endif
 
-                </td>
-            </tr>
-        </tbody>
-        @endforeach
-    </table>
+    @include('contact.searchfilterform')
+
+    {{-- favourite contact --}}
+    @include('contact.favlist')
 
     {{-- contact --}}
-    <table class="table table-hover my-0">
-        <thead>
-            {{-- sum Contact --}}
-            <tr>
-                <th colspan="5">
-                    <h5 class="font-weight-bold text-uppercase">Contacts: ({{ $contacts->count() }})</h5>
-                </th>
-        </thead>
-        <tbody>
-            @foreach ($contacts as $contact)
-                <a href="#">
-                    <tr>
-                        <td>
-                            @if ($contact->photo)
-                                <img src="{{url(Storage::url($contact->photo))}}" class="img-profile rounded-circle" alt="image" class="image-fluid rounded-circle" height="50px">
-                            @else
-                                <img src="{{url('assets/img/avatars/avatar.jpg')}}" class="img-profile rounded-circle" alt="image">
-                            @endif
-                        </td>
-                        <td>{{ $contact->name }}</td>
-                        <td class="d-none d-xl-table-cell">{{ $contact->phone }}</td>
-                        <td class="d-none d-xl-table-cell">{{ $contact->email }}</td>
-                        <td class="d-flex justify-content-between mt-2" width="120px">
-                            {!! Form::open(['method' => 'delete','route' => ['contact.destroy', $contact->id]]) !!}
-                                <button onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm btn-circle me-1">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            {!! Form::close() !!}
-                            <a href="{{url('contact/'.$contact->id.'/edit')}}" class="btn btn-primary btn-circle btn-sm me-1" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a href="{{url('contact/'.$contact->id)}}" class="btn btn-primary btn-circle btn-sm me-1" title="View">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            {{-- favourite --}}
-                            @if ($contact->favourite)
-                                {{-- <a href="{{url('contact/'.$contact->id.'/favourite')}}" class="btn btn-primary btn-circle btn-sm fav" title="Favourite" data-id="{{$contact->id}}" data-fav="{{$contact->favourite}}">
-                                    <i class="fas fa-star"></i>
-                                </a> --}}
-                                <button class="btn btn-primary btn-circle btn-sm fav" data-fav="{{$contact->favourite}}" data-id="{{$contact->id}}"><i class="fas fa-star"></i></button>
-                            @else
-                                {{-- <a href="{{url('contact/'.$contact->id.'/favourite')}}" class="btn btn-primary btn-circle btn-sm fav" title="Favourite" data-id="{{$contact->id}}" data-fav="{{$contact->favourite}}">
-                                    <i class="far fa-star"></i>
-                                </a> --}}
-                                <button class="btn btn-primary btn-circle btn-sm fav" data-fav="{{$contact->favourite}}" data-id="{{$contact->id}}"><i class="far fa-star"></i></button>
-                            @endif
-                            {{-- <a href="{{url('contact/'.$contact->id.'/favourite')}}" class="btn btn-primary btn-circle btn-sm" title="Favourite" data-fav="{{$contact->favourite}}" data-id="{{$contact->id}}">
-                                <i class="far fa-star"></i>
-                            </a> --}}
-                            {{-- <button class="btn btn-primary btn-circle btn-sm fav" data-fav="{{$contact->favourite}}" data-id="{{$contact->id}}"><i class="far fa-star"></i></button> --}}
-
-                        </td>
-                    </tr>
-                </a>
-            @endforeach
-        </tbody>
-
-    </table>
+    <div id="contact_data">
+        @include('contact.list')
+    </div>
 </div>
 @endsection
 
-
-@section("script")
-<script>
-$(document).ready(function () {
-    //autocomplete
-    $("#search").autocomplete({
-        source: "{{url('search')}}",
-        minLength: 1,
-        select: function (event, ui) {
-            console.log(ui.item.value);
-            $("#search").val(ui.item.value);
-        }
+@section('script')
+    <script>
+        $("#search").keyup(function(){
+        console.log(43243);
+        let url = "{{url()->full()}}";
+        get_contact_data(url);
     });
-    
-    
-
-    // $('.fav').click(function () {
-    //     var id = $(this).data('id');
-    //     var favourite = $(this).data('fav')?0:1;
-    //     alert(id);
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "{{url('favourite')}}",
-    //         data: {
-    //             favourite : favourite,
-    //             id : id,
-    //         },
-    //         success: function (response) {
-    //             console.log(response);
-    //             if(response.done == 1){
-    //                 alert(response.message);
-    //                 location.reload();
-    //             }else{
-    //                 alert(response.message);
-    //             }
-
-    //         }
-
-    //     });
-    // });
-    // $(document).on("click",'.fav',function(){
-    //     var id = $(this).data('id');
-    //     var favourite = $(this).data('fav') == 1 ? 0 : 1;
-    //     alert(favourite);
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "{{url('favourite')}}",
-    //         data: {
-    //             id : id,
-    //             favourite : favourite,
-    //         },
-    //         alert(data);
-    //         success: function (response) {
-    //             console.log(response);
-    //             if(response.done == 1){
-    //                 alert(response.message);
-    //                 location.reload();
-    //             }else{
-    //                 alert(response.message);
-    //             }
-
-    //             document.location.reload(true);
-
-    //         }
-
-    //     });
-    // });
-});
-</script>
+    $(document).on('change', '#filter', function(){
+        let url = "{{url()->full()}}";
+        
+        get_contact_data(url);
+    });
+    get_contact_data = (url) =>{
+        let form = $('#searchform');
+        $.ajax({
+            method: "get",
+            url: url,
+            headers: {"X-CSRF-TOKEN": "{{csrf_token()}}"},
+            data: form.serialize(),
+            dataType: 'JSON',
+            contentType: false,
+            cache: false,
+            processData: false,
+            error: function(xhr, status, error) {
+                swal({
+                    title:'Error '+error,
+                        text: xhr.responseJSON.message,
+                        icon: "error",
+                    });
+            },
+            success: function(data)
+            {
+                if (data.error == true) {
+                    swal({
+                            title: 'Error',
+                            text: data.message,
+                            icon: "error",
+                        });
+                }else{
+                    $('#contact_data').html(data.data);
+                }
+            }
+        });
+    }
+    </script>
 @endsection

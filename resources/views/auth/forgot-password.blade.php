@@ -1,9 +1,12 @@
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
-            <a href="/">
+            {{-- <a href="/">
                 <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
+            </a> --}}
+            <div>
+                <img src="{{url('assets/img/phonebook.jpg')}}" class="image text-center" alt="image" width="120px">
+            </div>
         </x-slot>
 
         <div class="mb-4 text-sm text-gray-600">

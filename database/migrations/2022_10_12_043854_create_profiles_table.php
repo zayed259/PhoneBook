@@ -13,16 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('contacts', function (Blueprint $table) {
+        Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('name');
-            $table->string('phone');
-            $table->string('email');
-            $table->string('photo');
-            $table->enum('isfavourite', [0, 1])->default(0)->comment('0 = not favourite, 1 = favourite');
-            $table->softDeletes();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict');
+            $table->string('fullname');
+            $table->string('phone')->unique();
+            $table->string('address')->nullable();
+            $table->string('image')->nullable();
+            $table->string('bloodgroup')->nullable();
             $table->timestamps();
         });
     }
@@ -34,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contacts');
+        Schema::dropIfExists('profiles');
     }
 };
