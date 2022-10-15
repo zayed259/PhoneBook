@@ -19,8 +19,11 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
             $table->string('phone');
-            $table->string('email');
-            $table->string('photo');
+            $table->string('homephone')->nullable();
+            $table->string('officephone')->nullable();
+            $table->string('email')->nullable();
+            $table->string('opemail')->nullable();
+            $table->string('photo')->nullable();
             $table->enum('isfavourite', [0, 1])->default(0)->comment('0 = not favourite, 1 = favourite');
             $table->softDeletes();
             $table->timestamps();

@@ -22,7 +22,7 @@
             @if ($contact->photo)
                 <img src="{{url(Storage::url($contact->photo))}}" alt="image" class="image-fluid rounded-circle" height="100px">
             @else
-                <img src="{{url('assets/img/avatars/avatar.jpg')}}" alt="image">
+                <img src="{{url('assets/img/avatars/avatar.jpg')}}" alt="image" height="100px">
             @endif
         </div>
         <div class="card-body">

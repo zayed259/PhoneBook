@@ -20,8 +20,6 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-
-
 Route::middleware(['auth'])->group(function () {
 
     // tag
@@ -34,12 +32,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource("/contact", ContactController::class);
     Route::get('export_contact_pdf', [ContactController::class, 'export_contact_pdf']);
     Route::put('/contactfav/{id}', [ContactController::class, 'favorite'])->name('contact.favorite');
-    // Route::get('search', [ContactController::class, 'search']);
     
     // profile
     Route::resource("profile", ProfileController::class);
-
-
 });
 
 require __DIR__.'/auth.php';

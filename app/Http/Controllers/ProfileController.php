@@ -78,39 +78,53 @@ class ProfileController extends Controller
      */
     public function update(Request $request, Profile $profile)
     {
+        // dd($request->all());
         $request->validate([
             'fullname' => 'required|string|max:255',
             'phone' => 'required|numeric',
             'address' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg',
             'bloodgroup' => 'required',
         ]);
 
-        $path = $request->file('image')->store('public/profiles');
-        $storagepath = Storage::path($path);
-        $img = Image::make($storagepath);
+        if($request->hasFile('image')){
+            $path = $request->file('image')->store('public/profiles');
+            $storagepath = Storage::path($path);
+            $img = Image::make($storagepath);
+    
+            // resize image instance
+            $img->resize(320, 320);
+    
+            // insert a watermark
+            // $img->insert('public/watermark.png');
+    
+            // save image in desired format
+            $img->save($storagepath);
+    
+            $u = User::find(Auth::id());
+            $p = $u->profile;
+            if($p->image){
+                Storage::delete($p->image);
+            }
+            $p->fullname = $request->fullname;
+            $p->phone = $request->phone;
+            $p->address = $request->address;
+            $p->bloodgroup = $request->bloodgroup;
+            $p->image = $path;
+            if($u->profile()->save($p)){
+                return back()->with('message',"Your profile has been Updated!!!");
+            }
+        }else{
+            $u = User::find(Auth::id());
+            $p = $u->profile;
+            $p->fullname = $request->fullname;
+            $p->phone = $request->phone;
+            $p->address = $request->address;
+            $p->bloodgroup = $request->bloodgroup;
+            if($u->profile()->save($p)){
+                return back()->with('message',"Your profile has been Updated!!!");
+            }
 
-        // resize image instance
-        $img->resize(320, 320);
-
-        // insert a watermark
-        // $img->insert('public/watermark.png');
-
-        // save image in desired format
-        $img->save($storagepath);
-
-        $u = User::find(Auth::id());
-        $p = $u->profile;
-        if($p->image){
-            Storage::delete($p->image);
-        }
-        $p->fullname = $request->fullname;
-        $p->phone = $request->phone;
-        $p->address = $request->address;
-        $p->bloodgroup = $request->bloodgroup;
-        $p->image = $path;
-        if($u->profile()->save($p)){
-            return back()->with('message',"Your profile has been updated!!!");
         }
     }
 }

@@ -13,7 +13,10 @@ class Contact extends Model
         'name',
         'user_id',
         'phone',
+        'homephone',
+        'officephone',
         'email',
+        'opemail',
         'photo'
     ];
 

@@ -60,25 +60,29 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
-        //upload
-        $path = $request->file('photo')->store('public/contacts');
-        $storagepath = Storage::path($path);
-        $img = Image::make($storagepath);
-
-        // resize image instance
-        $img->resize(320, 320);
-
-        // insert a watermark
-        // $img->insert('public/watermark.png');
-
-        // save image in desired format
-        $img->save($storagepath);
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('public/contacts');
+            $storagepath = Storage::path($path);
+            $img = Image::make($storagepath);
+            // resize image instance
+            $img->resize(320, 320);
+            // insert a watermark
+            // $img->insert('public/watermark.png');
+            // save image in desired format
+            $img->save($storagepath);
+        } else {
+            $path = null;
+        }
+        
         $u = User::find(Auth::id());
         $data = [
             'name' => $request->name,
             'user_id' => $u->id,
             'phone' => $request->phone,
+            'homephone' => $request->homephone,
+            'officephone' => $request->officephone,
             'email' => $request->email,
+            'opemail' => $request->opemail,
             'photo' => $path
         ];
         Contact::create($data);
@@ -116,27 +120,29 @@ class ContactController extends Controller
      */
     public function update(UpdateContactRequest $request, Contact $contact)
     {
-        //upload
-        $path = $request->file('photo')->store('public/contacts');
-        $storagepath = Storage::path($path);
-        $img = Image::make($storagepath);
-
-        // resize image instance
-        $img->resize(320, 320);
-
-        // insert a watermark
-        // $img->insert('public/watermark.png');
-
-        // save image in desired format
-        $img->save($storagepath);
-
-        if ($contact->photo) {
-            Storage::delete($contact->photo);
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('public/contacts');
+            $storagepath = Storage::path($path);
+            $img = Image::make($storagepath);
+            // resize image instance
+            $img->resize(320, 320);
+            // insert a watermark
+            // $img->insert('public/watermark.png');
+            // save image in desired format
+            $img->save($storagepath);
+            if ($contact->photo) {
+                Storage::delete($contact->photo);
+            }
+        } else {
+            $path = $contact->photo;
         }
 
         $contact->name = $request->name;
         $contact->phone = $request->phone;
+        $contact->homephone = $request->homephone;
+        $contact->officephone = $request->officephone;
         $contact->email = $request->email;
+        $contact->opemail = $request->opemail;
         $contact->photo = $path;
         $contact->save();
 

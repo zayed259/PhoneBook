@@ -82,7 +82,7 @@
 					<div class="row text-muted">
 						<div class="col-6 text-start">
 							<p class="mb-0">
-								<a class="text-muted" href="#" target="_blank"><strong>PhoneBook</strong></a> - <a class="text-muted" href="#" target="_blank">&copy; {{date('Y');}} <strong>Syed Zayed Hossain</strong></a>
+								<a class="text-muted" href="https://github.com/zayed259/PhoneBook" target="_blank"><strong>PhoneBook</strong></a> - &copy; {{date('Y');}} <a class="text-muted" href="https://www.facebook.com/zayed59" target="_blank"><strong>Syed Zayed Hossain</strong></a>
 							</p>
 						</div>
 					</div>

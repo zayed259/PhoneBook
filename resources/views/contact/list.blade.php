@@ -13,7 +13,7 @@
                     @if ($contact->photo)
                         <img src="{{url(Storage::url($contact->photo))}}" class="img-profile rounded-circle" alt="image" class="image-fluid rounded-circle" height="50px">
                     @else
-                        <img src="{{url('assets/img/avatars/avatar.jpg')}}" class="img-profile rounded-circle" alt="image">
+                        <img src="{{url('assets/img/avatars/avatar.jpg')}}" class="img-profile rounded-circle" alt="image" height="50px">
                     @endif
                 </td>
                 <td>{{ $contact->name }}</td>
