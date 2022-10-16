@@ -20,7 +20,8 @@
 	<link href="{{url('assets/css/app.css')}}" rel="stylesheet">
 	<link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+	{{-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet"> --}}
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
 
 	{{-- toastr notification css --}}
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -79,12 +80,10 @@
 
 			<footer class="footer">
 				<div class="container-fluid">
-					<div class="row text-muted">
-						<div class="col-6 text-start">
-							<p class="mb-0">
-								<a class="text-muted" href="https://github.com/zayed259/PhoneBook" target="_blank"><strong>PhoneBook</strong></a> - &copy; {{date('Y');}} <a class="text-muted" href="https://www.facebook.com/zayed59" target="_blank"><strong>Syed Zayed Hossain</strong></a>
-							</p>
-						</div>
+					<div class="text-center">
+						<p class="mb-0">
+							<a class="text-muted" href="https://github.com/zayed259/PhoneBook" target="_blank"><strong>PhoneBook</strong></a> - &copy; {{date('Y');}} <a class="text-muted" href="https://www.facebook.com/zayed59" target="_blank"><strong>Syed Zayed Hossain</strong></a>
+						</p>
 					</div>
 				</div>
 			</footer>

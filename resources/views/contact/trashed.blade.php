@@ -10,9 +10,7 @@
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-secondary">
         <h6 class="m-0 font-weight-bold text-light">Trashed Contact List</h6>
         <div class="dropdown no-arrow">
-            <a href="{{url('contact')}}" class="btn btn-primary btn-circle btn-sm" title="Back to Contact List">
-                <i class="fas fa-arrow-left"></i>
-            </a>
+            <a href="{{url('contact')}}" class="btn btn-primary btn-circle btn-sm" title="Back to Contact List"><i class="fas fa-arrow-left"></i></a>
         </div>
     </div>
     <!-- Card Body -->
@@ -23,7 +21,10 @@
                     <th>Photo</th>
                     <th>Name</th>
                     <th>Phone</th>
+                    <th>Home Phone</th>
+                    <th>Office Phone</th>
                     <th>Email</th>
+                    <th>Email (optional)</th>
                     <th width="180px">Action</th>
                 </tr>
                 @foreach ($contacts as $contact)
@@ -37,7 +38,10 @@
                         </td>
                         <td>{{ $contact->name }}</td>
                         <td>{{ $contact->phone }}</td>
+                        <td>{{ $contact->homephone }}</td>
+                        <td>{{ $contact->officephone }}</td>
                         <td>{{ $contact->email }}</td>
+                        <td>{{ $contact->opemail }}</td>
                         <td class="d-flex justify-content-center">
                             {!! Form::open(['method' => 'post','route' => ['contact.trashed.destroy', $contact->id]]) !!}
                                 <button onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm me-2"><i class="fas fa-trash"></i></button>
