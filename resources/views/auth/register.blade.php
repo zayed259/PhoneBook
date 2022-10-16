@@ -5,6 +5,7 @@
 	<title>{{ config('app.name', 'Laravel') }} | Register</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{{url('assets/img/icons/icon-48x48.png')}}" />
 
 	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
 
@@ -37,6 +38,13 @@
 									</p>
 								</div>
 							</div>
+                            
+							<!-- Session Status -->
+							<x-auth-session-status class="mb-4 text-danger" :status="session('status')" />
+
+							<!-- Validation Errors -->
+							<x-auth-validation-errors class="mb-4 text-danger" :errors="$errors" />
+
 							<form method="POST" action="{{ route('register') }}" class="signin-form">
                                 @csrf
 								<div class="form-group mt-3">
