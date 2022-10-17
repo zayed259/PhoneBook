@@ -83,6 +83,13 @@ class ContactController extends Controller
             'officephone' => $request->officephone,
             'email' => $request->email,
             'opemail' => $request->opemail,
+            'address' => $request->address,
+            'facebook' => $request->facebook,
+            'twitter' => $request->twitter,
+            'instagram' => $request->instagram,
+            'linkedin' => $request->linkedin,
+            'whatsapp' => $request->whatsapp,
+            'website' => $request->website,
             'photo' => $path
         ];
         Contact::create($data);
@@ -143,6 +150,13 @@ class ContactController extends Controller
         $contact->officephone = $request->officephone;
         $contact->email = $request->email;
         $contact->opemail = $request->opemail;
+        $contact->address = $request->address;
+        $contact->facebook = $request->facebook;
+        $contact->twitter = $request->twitter;
+        $contact->instagram = $request->instagram;
+        $contact->linkedin = $request->linkedin;
+        $contact->whatsapp = $request->whatsapp;
+        $contact->website = $request->website;
         $contact->photo = $path;
         $contact->save();
 
@@ -207,5 +221,11 @@ class ContactController extends Controller
         } else {
             return back()->with('warning', 'You are not authorized to hide/show this blog!!!');
         }
+    }
+
+    public function fav()
+    {
+        $contacts = Contact::where('user_id', Auth::id())->where('isfavourite', '1')->orderBy('name', 'asc')->get();
+        return view('contact.fav', compact('contacts'))->with('user', Auth::user());
     }
 }

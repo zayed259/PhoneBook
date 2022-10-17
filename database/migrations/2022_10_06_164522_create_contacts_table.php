@@ -23,6 +23,13 @@ return new class extends Migration
             $table->string('officephone')->nullable();
             $table->string('email')->nullable();
             $table->string('opemail')->nullable();
+            $table->string('address')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('twitter')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('linkedin')->nullable();
+            $table->string('whatsapp')->nullable();
+            $table->string('website')->nullable();
             $table->string('photo')->nullable();
             $table->enum('isfavourite', [0, 1])->default(0)->comment('0 = not favourite, 1 = favourite');
             $table->softDeletes();

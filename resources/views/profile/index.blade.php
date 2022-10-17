@@ -5,13 +5,15 @@
 @endsection
 
 @section('content')
-<div class="card card-hover shadow mb-4">
-    <div class="card-header py-3 d-flex justify-content-between bg-secondary">
-        <h6 class="card-title m-0 font-weight-bold text-light">Your Profile</h6>
-        <a href="{{url('contact')}}" class="btn btn-primary btn-circle btn-sm" title="Back to Dashboard">
+<div class="card shadow mb-4">
+    <!-- Card Header - Dropdown -->
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between border-left-info">
+        <h6 class="m-0 font-weight-bold text-primary">Your Profile</h6>
+        <a href="{{url('contact')}}" class="btn btn-primary btn-circle btn-sm" title="Back to Contactlist">
             <i class="fas fa-arrow-left"></i>
         </a>
     </div>
+    <!-- Card Body -->
     <div class="card-body">
         <!-- Session Status -->
         <x-auth-session-status class="mb-4" :status="session('status')" />
@@ -28,20 +30,19 @@
         {!! Form::open(['route' => ['profile.store'] ,'class'=>'user', 'enctype'=>'multipart/form-data']) !!}
         @endif
         
-        
         <div class="form-group row">
-            <div class="col-sm-6 mb-3">
+            <div class="col-sm-6 mb-3 mb-sm-0">
                 {!! Form::text('fullname', null, ['class'=>'form-control form-control-profile', 'id'=>'name', 'placeholder'=>'Name']) !!}
             </div>
             <div class="col-sm-6">
                 {!! Form::text('phone', null, ['class'=>'form-control form-control-profile', 'id'=>'phone', 'placeholder'=>'Phone Number']) !!}
             </div>
         </div>
-        <div class="form-group mb-3">
+        <div class="form-group">
             {!! Form::text('address', null, ['class'=>'form-control form-control-profile', 'id'=>'address', 'placeholder'=>'Address']) !!}
         </div>
         <div class="form-group row">
-            <div class="col-sm-6 mb-3">
+            <div class="col-sm-6 mb-3 mb-sm-0">
                 {!! Form::file('image', ['class'=>'form-control form-control-profile', 'id'=>'image']) !!}
             </div>
             <div class="col-sm-6">
@@ -53,4 +54,5 @@
         </div>
         {!! Form::close() !!}
     </div>
+</div>
 @endsection

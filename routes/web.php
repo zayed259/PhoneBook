@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource("/contact", ContactController::class);
     Route::get('export_contact_pdf', [ContactController::class, 'export_contact_pdf']);
     Route::put('/contactfav/{id}', [ContactController::class, 'favorite'])->name('contact.favorite');
+    Route::get('/favourite', [ContactController::class, 'fav']);
     
     // profile
     Route::resource("profile", ProfileController::class);

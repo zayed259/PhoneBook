@@ -17,6 +17,13 @@ class Contact extends Model
         'officephone',
         'email',
         'opemail',
+        'address',
+        'facebook',
+        'twitter',
+        'instagram',
+        'linkedin',
+        'whatsapp',
+        'website',
         'photo'
     ];
 
@@ -29,5 +36,4 @@ class Contact extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 }
