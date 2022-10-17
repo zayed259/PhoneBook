@@ -53,6 +53,10 @@
                     <i class="fas fa-fw fa-star"></i>
                     <span>Favourites</span>
                 </a>
+                <a class="nav-link" href="{{url('about')}}">
+                    <i class="fas fa-fw fa-info-circle"></i>
+                    <span>About</span>
+                </a>
             </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

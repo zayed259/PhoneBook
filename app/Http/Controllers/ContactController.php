@@ -228,4 +228,9 @@ class ContactController extends Controller
         $contacts = Contact::where('user_id', Auth::id())->where('isfavourite', '1')->orderBy('name', 'asc')->get();
         return view('contact.fav', compact('contacts'))->with('user', Auth::user());
     }
+
+    public function about()
+    {
+        return view('contact.about')->with('user', Auth::user());
+    }
 }
