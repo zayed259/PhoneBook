@@ -5,9 +5,9 @@
 @endsection
 
 @section('content')
-    <div class="card card-hover shadow mb-4">
-        <div class="card-header py-3 d-flex justify-content-between bg-secondary">
-            <h6 class="card-title m-0 font-weight-bold text-light">Update Contact</h6>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between border-left-info">
+            <h6 class="m-0 font-weight-bold text-primary">Update Contact</h6>
             <a href="{{url('contact')}}" class="btn btn-primary btn-circle btn-sm" title="Back to Contact List">
                 <i class="fas fa-arrow-left"></i>
             </a>
@@ -20,9 +20,9 @@
         </div>
         <div class="card-body text-center">
             @if ($contact->photo)
-                <img src="{{url(Storage::url($contact->photo))}}" alt="image" class="image-fluid rounded-circle" height="100px">
+                <img src="{{url(Storage::url($contact->photo))}}" alt="image" class="image-fluid rounded-circle" height="150px">
             @else
-                <img src="{{url('assets/img/avatars/avatar.jpg')}}" alt="image" height="100px">
+                <img src="{{url('assets/img/avatars/avatar.jpg')}}" alt="image" height="150px">
             @endif
         </div>
         <div class="card-body">

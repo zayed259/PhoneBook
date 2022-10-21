@@ -29,7 +29,7 @@
                 <button onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm btn-circle me-1">
                     <i class="fas fa-trash"></i>
                 </button>
-            {!! Form::close() !!}
+                {!! Form::close() !!}
             </div>
             <div class="dropdown-item">
                 <a href="{{url('contact/'.$contact->id.'/edit')}}" class="btn btn-primary btn-circle btn-sm me-1" title="Edit">
