@@ -129,7 +129,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <a class="text-muted" href="https://github.com/zayed259/PhoneBook" target="_blank"><strong>PhoneBook</strong></a> - &copy; {{date('Y');}} <a class="text-muted" href="https://www.facebook.com/zayed59" target="_blank"><strong>Syed Zayed Hossain</strong></a>
+                        <a class="text-muted" href="https://github.com/zayed259/PhoneBook" target="_blank"><strong>PhoneBook</strong></a> - &copy; {{date('Y');}} <a class="text-muted" href="https://www.facebook.com/zayed259" target="_blank"><strong>Syed Zayed Hossain</strong></a>
                     </div>
                 </div>
             </footer>
